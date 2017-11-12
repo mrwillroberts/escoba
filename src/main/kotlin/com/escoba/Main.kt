@@ -1,3 +1,5 @@
+package com.escoba
+
 import java.util.*
 import java.util.stream.IntStream.range
 import kotlin.streams.toList
