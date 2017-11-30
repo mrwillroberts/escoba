@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.1.4-3'
-    ext.spring_boot_version = '1.5.8.RELEASE'
+    ext.spring_boot_version = '2.0.0.RELEASE'
 
     repositories {
         mavenCentral()
@@ -29,6 +29,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile "org.springframework.boot:spring-boot-devtools"
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile('org.springframework.boot:spring-boot-starter-test')
