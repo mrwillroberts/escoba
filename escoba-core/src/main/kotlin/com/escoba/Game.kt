@@ -1,7 +1,6 @@
 package com.escoba
 
 import java.util.stream.IntStream
-import kotlin.streams.toList
 
 class Game(val deck: Deck, val players: List<Player>) {
     var table = emptyList<Card>()
@@ -40,14 +39,15 @@ class Game(val deck: Deck, val players: List<Player>) {
 
 
     fun isLive(): Boolean {
+        if (deck.isFull()){
+            return false
+        }
         return deck.isNotEmpty() || players.count { p -> p.hand.isNotEmpty() } > 0
     }
 }
 
 fun createGame(seed:Long = 0): Game {
-    val suits = listOf("Coin", "Cup", "Sword", "Club").map { s -> Suit(s) }
-    val cards = suits.map { suit -> IntStream.range(1, 11).mapToObj { n -> Card(suit, n) }.toList() }.flatten()
-    val deck = Deck(cards.shuffle(seed))
+    val deck = createDeck(seed)
     val players = listOf(
             Player("Player 1"),
             Player("Player 2")

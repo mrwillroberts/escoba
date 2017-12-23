@@ -1,6 +1,8 @@
 package com.escoba
 
 import java.util.*
+import java.util.stream.IntStream
+import kotlin.streams.toList
 
 data class Deck(private var cards: Collection<Card>) {
     fun draw(number: Int): List<Card> {
@@ -12,6 +14,7 @@ data class Deck(private var cards: Collection<Card>) {
     fun size(): Int = cards.size
 
     fun isNotEmpty(): Boolean = cards.isNotEmpty()
+    fun isFull(): Boolean = cards.size == 40
 }
 
 data class Suit(var name: String)
@@ -33,3 +36,9 @@ fun <T> Iterable<T>.shuffle(seed: Long? = null): List<T> {
     return list
 }
 
+fun createDeck(seed: Long? = null): Deck {
+    val suits = listOf("Coin", "Cup", "Sword", "Club").map { s -> Suit(s) }
+    val cards = suits.map { suit -> IntStream.range(1, 11).mapToObj { n -> Card(suit, n) }.toList() }.flatten()
+    val deck = Deck(cards.shuffle(seed))
+    return deck
+}
