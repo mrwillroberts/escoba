@@ -1,4 +1,6 @@
 rootProject.name = 'escoba'
 include 'escoba-main'
 include 'escoba-core'
+include 'escoba-cmdline'
+include 'escoba-client'
 

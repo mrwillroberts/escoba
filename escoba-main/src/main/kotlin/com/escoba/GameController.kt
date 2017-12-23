@@ -40,14 +40,3 @@ fun toGameView(id: Long, game: Game) : GameView {
 }
 
 private fun toCardDto(card:Card) = CardDto(card.suit.name, card.numericValue)
-
-data class GameView(
-        val id: Long,
-        val live:Boolean,
-        val currentPlayer:String,
-        val players:List<String>,
-        val cardsInDeck:Int,
-        val tableCards:List<CardDto>,
-        val currentPlayerHand:List<CardDto>) // TODO move this off
-
-data class CardDto(val suit:String, val value:Int)
