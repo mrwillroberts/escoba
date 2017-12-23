@@ -37,8 +37,13 @@ fun <T> Iterable<T>.shuffle(seed: Long? = null): List<T> {
 }
 
 fun createDeck(seed: Long? = null): Deck {
-    val suits = listOf("Coin", "Cup", "Sword", "Club").map { s -> Suit(s) }
-    val cards = suits.map { suit -> IntStream.range(1, 11).mapToObj { n -> Card(suit, n) }.toList() }.flatten()
+    val cards = cards()
     val deck = Deck(cards.shuffle(seed))
     return deck
+}
+
+fun cards(): List<Card> {
+    val suits = listOf("Coin", "Cup", "Sword", "Club").map { s -> Suit(s) }
+    val cards = suits.map { suit -> IntStream.range(1, 11).mapToObj { n -> Card(suit, n) }.toList() }.flatten()
+    return cards
 }

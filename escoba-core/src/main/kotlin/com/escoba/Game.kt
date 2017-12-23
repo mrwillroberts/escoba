@@ -6,13 +6,29 @@ class Game(val deck: Deck, val players: List<Player>) {
     var table = emptyList<Card>()
     var currentPlayer = players[0]
 
+    fun start() {
+        dealRound()
+        println("Dealing 4 table cards")
+        table = deck.draw(4)
+    }
+
     fun playTurn(cardToPlay: Card) {
+        if (!currentPlayer.hand.contains(cardToPlay)) {
+            throw IllegalArgumentException("${currentPlayer.name} does not have ${cardToPlay})}")
+        }
         currentPlayer.hand = currentPlayer.hand.filter { h -> h != cardToPlay }
         table += listOf(cardToPlay)
 
         println("${currentPlayer.name} plays $cardToPlay")
 
         endOfTurn()
+    }
+
+    fun isLive(): Boolean {
+        if (deck.isFull()){
+            return false
+        }
+        return deck.isNotEmpty() || players.count { p -> p.hand.isNotEmpty() } > 0
     }
 
     private fun endOfTurn() {
@@ -22,11 +38,6 @@ class Game(val deck: Deck, val players: List<Player>) {
         }
     }
 
-    fun start() {
-        dealRound()
-        println("Dealing 4 table cards")
-        table = deck.draw(4)
-    }
 
     private fun dealRound() {
         println("Dealing each player 3 more cards")
@@ -35,14 +46,6 @@ class Game(val deck: Deck, val players: List<Player>) {
                 p.hand = p.hand + deck.draw(1)
             }
         }
-    }
-
-
-    fun isLive(): Boolean {
-        if (deck.isFull()){
-            return false
-        }
-        return deck.isNotEmpty() || players.count { p -> p.hand.isNotEmpty() } > 0
     }
 }
 
