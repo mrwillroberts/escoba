@@ -17,7 +17,10 @@ data class Deck(private var cards: Collection<Card>) {
     fun isFull(): Boolean = cards.size == 40
 }
 
-data class Suit(var name: String)
+enum class Suit {
+    Coin, Cup, Sword, Club
+}
+
 data class Card(var suit: Suit, var numericValue: Int) {
     override fun toString(): String {
         return "<${suit.name} ${numericValue}>"
@@ -50,7 +53,7 @@ fun createDeck(seed: Long? = null): Deck {
 }
 
 fun cards(): List<Card> {
-    val suits = listOf("Coin", "Cup", "Sword", "Club").map { s -> Suit(s) }
+    val suits = Suit.values()
     val cards = suits.map { suit -> IntStream.range(1, 11).mapToObj { n -> Card(suit, n) }.toList() }.flatten()
     return cards
 }

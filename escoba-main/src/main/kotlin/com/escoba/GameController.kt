@@ -24,7 +24,7 @@ class GameController {
 
     @PutMapping("/game/{id}")
     fun playCard(@PathVariable(value = "id") id: Long, @RequestBody card: CardDto) {
-        gameMap.get(id)?.playTurn(Card(Suit(card.suit),card.value))
+        gameMap.get(id)?.playTurn(Card(Suit.valueOf(card.suit),card.value))
     }
 }
 
