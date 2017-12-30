@@ -7,24 +7,21 @@ import java.util.concurrent.atomic.AtomicLong
 @RestController
 class GameController {
 
-    val counter = AtomicLong()
-    val gameMap = ConcurrentHashMap<Long, Game>()
+    val gameRepository = InMemoryGameRepository()
 
     @GetMapping("/game/create")
-    fun createGame(@RequestParam(value = "name", defaultValue = "World") name: String) : Long {
-        val gameId = counter.incrementAndGet()
-        gameMap.putIfAbsent(gameId, createGame())
-        return gameId
+    fun createGame() : Long {
+        return gameRepository.save(game())
     }
 
     @GetMapping("/game/{id}")
     fun getGame(@PathVariable(value = "id") id: Long) : GameView? {
-        return gameMap.get(id)?.let{ game -> toGameView(id,game) }
+        return gameRepository.load(id)?.let{ game -> toGameView(id,game) }
     }
 
     @PutMapping("/game/{id}")
     fun playCard(@PathVariable(value = "id") id: Long, @RequestBody card: CardDto) {
-        gameMap.get(id)?.playTurn(Card(Suit.valueOf(card.suit),card.value))
+        gameRepository.load(id)?.playTurn(Card(Suit.valueOf(card.suit),card.value))
     }
 }
 

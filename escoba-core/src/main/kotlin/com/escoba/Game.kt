@@ -68,7 +68,7 @@ class Game(val deck: Deck, val players: List<Player>) {
     }
 }
 
-fun createGame(seed:Long = 0): Game {
+fun game(seed:Long = 0): Game {
     val deck = createDeck(seed)
     val players = listOf(
             Player("Player 1"),
