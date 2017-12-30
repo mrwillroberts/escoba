@@ -58,6 +58,24 @@ class GameTest {
 
     }
 
+    @Test
+    fun turnWithTableCardsAddsTrickToCurrentPlayer() {
+        val fiveOfCoins = Card(Suit("Coin"), 5)
+        val tenOfCoins = Card(Suit("Coin"), 10)
+
+        g = Game(Deck(listOf()), listOf(player1, player2))
+        player1.hand += fiveOfCoins
+        g.table += tenOfCoins
+
+        assertThat(player1.tricks.isEmpty(), equalTo(true))
+
+        g.playTurn(fiveOfCoins, setOf(tenOfCoins))
+
+        assertThat(player1.tricks.isEmpty(), equalTo(false))
+        assertThat(player2.tricks.isEmpty(), equalTo(true))
+
+    }
+
     @Test(expected = Exception::class)
     fun playerCantPlayIllegalCard() {
         gameIsNotLiveUntilStarted()

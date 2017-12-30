@@ -12,16 +12,30 @@ class Game(val deck: Deck, val players: List<Player>) {
         table = deck.draw(4)
     }
 
-    fun playTurn(cardToPlay: Card) {
+    fun playTurn(cardToPlay: Card, tableCardsToPlay: Set<Card> = setOf()) {
+        validateArguments(cardToPlay)
+
+        currentPlayer.hand = currentPlayer.hand.filter { h -> h != cardToPlay }
+
+        if (tableCardsToPlay.isEmpty()){
+            println("${currentPlayer.name} plays $cardToPlay")
+            table += listOf(cardToPlay)
+        } else {
+            val trick = Trick(tableCardsToPlay + cardToPlay)
+            println("${currentPlayer.name} plays $trick")
+
+            table = table.filter { c->!tableCardsToPlay.contains(c) }
+            currentPlayer.tricks += trick
+        }
+
+
+        endOfTurn()
+    }
+
+    private fun validateArguments(cardToPlay: Card) {
         if (!currentPlayer.hand.contains(cardToPlay)) {
             throw IllegalArgumentException("${currentPlayer.name} does not have ${cardToPlay})}")
         }
-        currentPlayer.hand = currentPlayer.hand.filter { h -> h != cardToPlay }
-        table += listOf(cardToPlay)
-
-        println("${currentPlayer.name} plays $cardToPlay")
-
-        endOfTurn()
     }
 
     fun isLive(): Boolean {
