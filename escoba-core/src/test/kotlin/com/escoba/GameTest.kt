@@ -9,7 +9,8 @@ class GameTest {
     private val player1 = Player("A")
     private val player2 = Player("B")
 
-    var g = Game(createDeck(), listOf(player1, player2))
+    val deck = createDeck()
+    var g = Game(deck, listOf(player1, player2))
 
     @Test
     fun gameIsNotLiveUntilStarted() {
@@ -46,7 +47,7 @@ class GameTest {
 
     @Test
     fun onceAllCardsArePlayedGameIsNoLongerLive() {
-        g = Game(Deck(cards().take(2)), listOf(player1,player2))
+        deck.draw(38) // remove most cards
         g.start()
 
         assertThat(g.isLive(), equalTo(true))
@@ -60,27 +61,38 @@ class GameTest {
 
     @Test
     fun turnWithTableCardsAddsTrickToCurrentPlayer() {
-        val fiveOfCoins = Card(Suit("Coin"), 5)
-        val tenOfCoins = Card(Suit("Coin"), 10)
 
-        g = Game(Deck(listOf()), listOf(player1, player2))
-        player1.hand += fiveOfCoins
-        g.table += tenOfCoins
+        player1.hand += Coin.FIVE
+        g.table += Coin.TEN
 
         assertThat(player1.tricks.isEmpty(), equalTo(true))
 
-        g.playTurn(fiveOfCoins, setOf(tenOfCoins))
+        g.playTurn(Coin.FIVE, setOf(Coin.TEN))
 
         assertThat(player1.tricks.isEmpty(), equalTo(false))
         assertThat(player2.tricks.isEmpty(), equalTo(true))
-
     }
 
     @Test(expected = Exception::class)
-    fun playerCantPlayIllegalCard() {
+    fun playerCantPlayIllegalTableCard() {
+        player1.hand += Coin.FIVE
+
+        g.playTurn(Coin.FIVE, setOf(Coin.TEN))
+    }
+
+    @Test(expected = Exception::class)
+    fun sumOfCardsPlayedNotEqualTo15IsIllegal() {
+        player1.hand += Coin.FIVE
+        g.table += Coin.NINE
+
+        g.playTurn(Coin.FIVE, setOf(Coin.NINE))
+    }
+
+    @Test(expected = Exception::class)
+    fun playerCantPlayIllegalHandCard() {
         gameIsNotLiveUntilStarted()
 
-        g.playTurn(player2.hand[0]) // player ones shouldn't be able to play player 2's cards
+        g.playTurn(player2.hand[0]) // player 1 shouldn't be able to play player 2's cards
     }
 
 

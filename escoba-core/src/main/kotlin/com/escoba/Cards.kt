@@ -24,7 +24,14 @@ data class Card(var suit: Suit, var numericValue: Int) {
     }
 }
 
-data class Trick(val cards: Collection<Card>)
+data class Trick(val cards: Collection<Card>){
+    init {
+        val trickValue = cards.map { card -> card.numericValue }.sum()
+        if (trickValue != 15) {
+            throw IllegalArgumentException("Trick ${cards} value ${trickValue}!=15")
+        }
+    }
+}
 
 /**
  * Returns a randomized list.
