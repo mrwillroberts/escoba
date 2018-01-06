@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
 
     while (gameView.live) {
         val chosenCard = renderer.chooseCard(gameView,gameView.currentPlayerHand)
-
+        val tableCards = renderer.chooseTableCards(chosenCard, gameView.tableCards)
         api.put("/game/${gameId}", chosenCard)
 
         gameView = api.getForEntity("/game/${gameId}",GameView::class.java).body
@@ -72,6 +72,15 @@ class ConsoleRenderer {
 
     fun isValidChoice(choice: Int?, noOfChoices: Int): Boolean {
         return choice != null && choice >= 0 && choice < noOfChoices
+    }
+
+    fun chooseTableCards(chosenCard: CardDto, tableCards: List<CardDto>): Set<CardDto> {
+        val trickOptions = calculateTrickOptions(chosenCard, tableCards)
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun calculateTrickOptions(chosenCard: CardDto, tableCards: List<CardDto>): List<Set<CardDto>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 

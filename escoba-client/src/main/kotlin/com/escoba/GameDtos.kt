@@ -9,4 +9,8 @@ data class GameView(
         val tableCards:List<CardDto>,
         val currentPlayerHand:List<CardDto>) // TODO move this off
 
-data class CardDto(val suit:String, val value:Int)
+data class CardDto(val suit:String, val value:Int) {
+    override fun toString(): String {
+        return "<${suit} ${value}>"
+    }
+}
