@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
     while (gameView.live) {
         val chosenCard = renderer.chooseCard(gameView,gameView.currentPlayerHand)
         val tableCards = renderer.chooseTableCards(chosenCard, gameView.tableCards)
-        api.put("/game/${gameId}", chosenCard)
+        api.put("/game/${gameId}", TurnDto(chosenCard,tableCards.toList()))
 
         gameView = api.getForEntity("/game/${gameId}",GameView::class.java).body
     }
@@ -56,7 +56,6 @@ class ConsoleRenderer {
 
     fun chooseCard(g: GameView, hand: List<CardDto>): CardDto {
 
-
         println("\nTable: " + g.tableCards.joinToString(" "))
         var choice: Int? = null
         while (!isValidChoice(choice, hand.size)) {
@@ -76,11 +75,22 @@ class ConsoleRenderer {
 
     fun chooseTableCards(chosenCard: CardDto, tableCards: List<CardDto>): Set<CardDto> {
         val trickOptions = calculateTrickOptions(chosenCard, tableCards)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        var choice: Int? = null
+        while (!isValidChoice(choice, trickOptions.size)) {
+            println("Options:")
+
+            range(0, trickOptions.size)
+                    .mapToObj { i -> "\t[${i}] ${trickOptions[i]}"}
+                    .forEach(::println)
+
+            print("Choose an option:")
+            choice = readLine()?.toIntOrNull()
+        }
+
+        return trickOptions[checkNotNull(choice)]-chosenCard
+
     }
 
-    fun calculateTrickOptions(chosenCard: CardDto, tableCards: List<CardDto>): List<Set<CardDto>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
 

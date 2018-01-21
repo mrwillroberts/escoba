@@ -14,3 +14,5 @@ data class CardDto(val suit:String, val value:Int) {
         return "<${suit} ${value}>"
     }
 }
+
+data class TurnDto(val chosenCard:CardDto, val tableCards:List<CardDto>)

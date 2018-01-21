@@ -1,8 +1,6 @@
 package com.escoba
 
 import org.springframework.web.bind.annotation.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicLong
 
 @RestController
 class GameController {
@@ -20,10 +18,13 @@ class GameController {
     }
 
     @PutMapping("/game/{id}")
-    fun playCard(@PathVariable(value = "id") id: Long, @RequestBody card: CardDto) {
-        gameRepository.load(id)?.playTurn(Card(Suit.valueOf(card.suit),card.value))
+    fun playTurn(@PathVariable(value = "id") id: Long, @RequestBody turn: TurnDto) {
+        gameRepository.load(id)?.playTurn(toCard(turn.chosenCard), turn.tableCards.map(::toCard).toSet())
     }
+
 }
+
+private fun toCard(cardDto: CardDto) = Card(Suit.valueOf(cardDto.suit), cardDto.value)
 
 fun toGameView(id: Long, game: Game) : GameView {
     return GameView(
